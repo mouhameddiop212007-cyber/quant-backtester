@@ -27,3 +27,6 @@ Path("results").mkdir(exist_ok=True)
 fig.tight_layout()
 fig.savefig("results/compare_strategies.png", dpi=150)
 print("Graphique enregistre dans results/compare_strategies.png")
+
+for r in results:
+    print(f"{r.strategy_name}: investi {r.positions.mean():.0%} du temps, turnover {r.turnover.sum():.1f}")
