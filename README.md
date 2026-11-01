@@ -1,4 +1,5 @@
 # quant-backtester
+**[Essayer le dashboard en ligne](https://quant-backtester-hken.streamlit.app)**
 
 Framework Python de backtesting de strategies de trading, concu pour apprendre
 la finance de marche et le genie logiciel en parallele. Evolution prevue vers
