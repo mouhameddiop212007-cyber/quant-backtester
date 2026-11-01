@@ -99,6 +99,27 @@ Optimisation de la fenêtre du momentum (20 à 250 jours) sur 5 ans glissants, t
 
 
 
+## Pricing d'options
+
+![Convergence](results/options_convergence.png)
+![Grecques](results/options_greeks.png)
+
+Option at-the-money (S=K=100, T=1 an, r=5 %, vol=20 %) :
+
+| | Black-Scholes | Binomial (500 pas) | Monte Carlo (200 000 traj.) | Américaine (500 pas) |
+|---|---|---|---|---|
+| Call | 10,4506 | 10,4466 | 10,4512 ± 0,0233 | 10,4466 |
+| Put | 5,5735 | 5,5695 | 5,5735 ± 0,0148 | 6,0888 |
+
+Un call asiatique (moyenne arithmétique, Monte Carlo) vaut 5,78 contre 10,45 pour l'européen : la moyenne réduit la volatilité effective du sous-jacent.
+
+**Validation** : parité call-put, grecques comparées à des différences finies, convergence de l'arbre et du Monte Carlo vers Black-Scholes, prime d'exercice anticipé du put américain.
+
+**Limites** : volatilité et taux constants (pas de smile, pas de modèle de Heston), options américaines pricées uniquement par arbre.
+
+
+
+
 ## Feuille de route
 - [x] Phase 1 : données et métriques
 - [x] Phase 2 : moteur de backtest, stratégies SMA, RSI, momentum
