@@ -5,7 +5,7 @@ Framework Python de backtesting de strategies de trading, concu pour apprendre
 la finance de marche et le genie logiciel en parallele. Evolution prevue vers
 l'optimisation de portefeuille (Markowitz, VaR/CVaR, Risk Parity).
 
-![Dashboard](results/dashboard.png)
+![Dashboard](results/dashbord.png)
 
 ## Lancer le dashboard
 ```bash
