@@ -126,5 +126,5 @@ Un call asiatique (moyenne arithmétique, Monte Carlo) vaut 5,78 contre 10,45 po
 - [x] Phase 3 : grid search et validation walk-forward
 - [x] Phase 4 : optimisation de portefeuille (Markowitz, Risk Parity, VaR/CVaR)
 - [x] Phase 5 : dashboard Streamlit
-- [ ] Pricer d'options (Black-Scholes, arbre binomial, Monte Carlo)
+- [x] Pricer d'options (Black-Scholes, arbre binomial, Monte Carlo)
 - [ ] Stress tests (2008, 2020, 2022)
