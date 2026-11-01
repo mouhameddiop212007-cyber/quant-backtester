@@ -4,6 +4,17 @@ Framework Python de backtesting de strategies de trading, concu pour apprendre
 la finance de marche et le genie logiciel en parallele. Evolution prevue vers
 l'optimisation de portefeuille (Markowitz, VaR/CVaR, Risk Parity).
 
+![Dashboard](results/dashboard.png)
+
+## Lancer le dashboard
+```bash
+pip install -e ".[dev]"
+streamlit run app/streamlit_app.py
+```
+
+
+
+
 ## Fonctionnalites actuelles
 - Chargement de donnees (yfinance) avec cache local
 - Metriques : rendement annualise, volatilite, Sharpe, drawdown maximum
@@ -36,25 +47,6 @@ La stratégie SMA réduit la volatilité mais sous-performe le Buy & Hold sur ce
 **Lecture** : aucune stratégie ne bat le Buy & Hold en rendement ajusté du risque sur cette période haussière. Le momentum offre le meilleur compromis : drawdown réduit de 10 points pour environ 5 points de rendement en moins.
 
 **Limites** : le cash ne rapporte rien dans cette version, un seul actif et une seule période sont testés, les résultats passés ne préjugent pas des résultats futurs.
-
-
-## Optimisation de portefeuille (SPY, EFA, TLT, GLD)
-
-Poids estimés sur les 252 derniers jours, rééquilibrage mensuel, coûts de 5 bps, poids appliqués à J+1.
-
-![Comparaison](results/portfolio_comparison.png)
-![Frontière efficiente](results/frontier.png)
-
-| Méthode | Rendement | Volatilité | Sharpe | Max drawdown | CVaR 95 % (jour) | Turnover/an |
-|---|---|---|---|---|---|---|
-| Équipondéré | 7,8 % | 9,9 % | 0,81 | -23,9 % | 1,4 % | 0,37 |
-| Min variance | 8,4 % | 8,9 % | 0,95 | -25,9 % | 1,3 % | 1,04 |
-| Risk parity | 7,6 % | 9,1 % | 0,85 | -24,6 % | 1,3 % | 0,48 |
-| Max Sharpe | 9,3 % | 12,2 % | 0,79 | -31,0 % | 1,9 % | 4,18 |
-
-**Lecture** : le Max Sharpe est le moins robuste (turnover de 4,18 par an, drawdown de -31 %) car il amplifie l'erreur d'estimation des rendements espérés. Min variance et Risk parity sont plus stables. Les écarts de Sharpe entre méthodes (erreur standard d'environ ±0,3 sur 15 ans) ne sont pas statistiquement significatifs : l'équipondéré reste une référence difficile à battre.
-
-**Limites** : la frontière efficiente est calculée sur tout l'échantillon (illustration in-sample), covariance empirique sans régularisation, poids long-only, 4 actifs et une seule période.
 
 
 
@@ -107,9 +99,10 @@ Optimisation de la fenêtre du momentum (20 à 250 jours) sur 5 ans glissants, t
 
 
 ## Feuille de route
-- [x] Phase 1 : donnees et metriques
-- [x] Phase 2 : moteur de backtest (socle)
-- [ ] Phase 2 : strategies RSI et momentum
-- [ ] Phase 3 : walk-forward, graphiques d'analyse
-- [ ] Phase 4 : optimisation de portefeuille (Markowitz, VaR/CVaR, Risk Parity)
-- [ ] Phase 5 : dashboard Streamlit
+- [x] Phase 1 : données et métriques
+- [x] Phase 2 : moteur de backtest, stratégies SMA, RSI, momentum
+- [x] Phase 3 : grid search et validation walk-forward
+- [x] Phase 4 : optimisation de portefeuille (Markowitz, Risk Parity, VaR/CVaR)
+- [x] Phase 5 : dashboard Streamlit
+- [ ] Pricer d'options (Black-Scholes, arbre binomial, Monte Carlo)
+- [ ] Stress tests (2008, 2020, 2022)
