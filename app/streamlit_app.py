@@ -17,6 +17,7 @@ from quant_backtester.portfolio import (
     efficient_frontier, equal_weight, historical_cvar, historical_var, make_weight_fn,
     max_sharpe, mean_cov, min_variance, portfolio_stats, risk_parity, run_portfolio_backtest,
 )
+from quant_backtester.options import bs_greeks, bs_price, crr_price, mc_price
 from quant_backtester.strategies import BuyAndHold, Momentum, RSIMeanReversion, SMACrossover
 
 st.set_page_config(page_title="Quant Backtester", layout="wide")
@@ -92,8 +93,8 @@ except Exception as exc:  # reseau, ticker inconnu...
 
 st.sidebar.success(f"{len(prices)} jours : {prices.index[0].date()} -> {prices.index[-1].date()}")
 
-tab_portfolio, tab_strategy, tab_frontier = st.tabs(
-    ["Portefeuille", "Strategie sur un actif", "Frontiere efficiente"]
+tab_portfolio, tab_strategy, tab_frontier, tab_options = st.tabs(
+    ["Portefeuille", "Strategie sur un actif", "Frontiere efficiente", "Options"]
 )
 
 # ------------------------------------------------------------------ portefeuille
@@ -187,3 +188,48 @@ with tab_frontier:
         ax.legend()
         st.pyplot(fig)
         st.dataframe(pd.DataFrame(portfolios, index=tickers).T.style.format("{:.1%}"))
+
+# ------------------------------------------------------------------ options
+with tab_options:
+    st.caption("Pricing d'options : Black-Scholes, arbre binomial CRR et Monte Carlo. "
+               "Outil pedagogique, sans donnees de marche.")
+    c1, c2, c3 = st.columns(3)
+    spot = c1.number_input("Prix du sous-jacent (S)", 1.0, 10_000.0, 100.0, 1.0)
+    strike = c1.number_input("Strike (K)", 1.0, 10_000.0, 100.0, 1.0)
+    maturity = c2.number_input("Maturite (annees)", 0.01, 10.0, 1.0, 0.25)
+    rate = c2.number_input("Taux sans risque (%)", -5.0, 20.0, 3.0, 0.25) / 100
+    vol = c3.number_input("Volatilite (%)", 1.0, 200.0, 20.0, 1.0) / 100
+    div = c3.number_input("Dividende continu (%)", 0.0, 20.0, 0.0, 0.25) / 100
+    kind = st.radio("Type", ["call", "put"], horizontal=True)
+    steps = st.slider("Pas de l'arbre binomial", 50, 1000, 300, 50)
+    n_paths = st.select_slider("Trajectoires Monte Carlo", [10_000, 50_000, 100_000, 500_000], 100_000)
+
+    try:
+        bs = float(bs_price(spot, strike, maturity, rate, vol, kind, div))
+        tree_eu = crr_price(spot, strike, maturity, rate, vol, kind, steps, False, div)
+        tree_us = crr_price(spot, strike, maturity, rate, vol, kind, steps, True, div)
+        mc, mc_se = mc_price(spot, strike, maturity, rate, vol, kind, n_paths, div)
+        greeks = bs_greeks(spot, strike, maturity, rate, vol, kind, div)
+    except ValueError as exc:
+        st.error(str(exc))
+    else:
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Black-Scholes", f"{bs:.4f}")
+        m2.metric("Arbre europeen", f"{tree_eu:.4f}")
+        m3.metric("Arbre americain", f"{tree_us:.4f}", f"prime de {tree_us - tree_eu:+.4f}")
+        m4.metric("Monte Carlo", f"{mc:.4f}", f"+/- {1.96 * mc_se:.4f} (IC 95 %)", delta_color="off")
+
+        st.subheader("Grecques")
+        st.dataframe(pd.DataFrame({
+            "Delta": [greeks["delta"]], "Gamma": [greeks["gamma"]],
+            "Vega (+1 pt de vol)": [greeks["vega"] / 100], "Theta (par jour)": [greeks["theta"] / 365],
+            "Rho (+1 pt de taux)": [greeks["rho"] / 100],
+        }, index=[kind]).style.format("{:.4f}"))
+
+        st.subheader("Valeur de l'option selon le sous-jacent")
+        grid = pd.Series(range(50, 151), dtype=float) / 100 * strike
+        payoff = (grid - strike).clip(lower=0) if kind == "call" else (strike - grid).clip(lower=0)
+        st.line_chart(pd.DataFrame({
+            "Valeur aujourd'hui (Black-Scholes)": bs_price(grid.to_numpy(), strike, maturity, rate, vol, kind, div),
+            "Payoff a l'echeance": payoff.to_numpy(),
+        }, index=grid.round(2)))

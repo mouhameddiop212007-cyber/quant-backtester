@@ -22,7 +22,7 @@ def test_dashboard_runs_without_error(monkeypatch):
     monkeypatch.setattr("quant_backtester.data.load_universe", fake_universe)
     at = AppTest.from_file(str(APP), default_timeout=120).run()
     assert not at.exception
-    assert len(at.tabs) == 3
+    assert len(at.tabs) == 4
     assert len(at.dataframe) >= 2  # tableaux de metriques (portefeuille + strategie)
 
 
