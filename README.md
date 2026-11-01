@@ -38,6 +38,25 @@ La stratégie SMA réduit la volatilité mais sous-performe le Buy & Hold sur ce
 **Limites** : le cash ne rapporte rien dans cette version, un seul actif et une seule période sont testés, les résultats passés ne préjugent pas des résultats futurs.
 
 
+## Optimisation de portefeuille (SPY, EFA, TLT, GLD)
+
+Poids estimés sur les 252 derniers jours, rééquilibrage mensuel, coûts de 5 bps, poids appliqués à J+1.
+
+![Comparaison](results/portfolio_comparison.png)
+![Frontière efficiente](results/frontier.png)
+
+| Méthode | Rendement | Volatilité | Sharpe | Max drawdown | CVaR 95 % (jour) | Turnover/an |
+|---|---|---|---|---|---|---|
+| Équipondéré | 7,8 % | 9,9 % | 0,81 | -23,9 % | 1,4 % | 0,37 |
+| Min variance | 8,4 % | 8,9 % | 0,95 | -25,9 % | 1,3 % | 1,04 |
+| Risk parity | 7,6 % | 9,1 % | 0,85 | -24,6 % | 1,3 % | 0,48 |
+| Max Sharpe | 9,3 % | 12,2 % | 0,79 | -31,0 % | 1,9 % | 4,18 |
+
+**Lecture** : le Max Sharpe est le moins robuste (turnover de 4,18 par an, drawdown de -31 %) car il amplifie l'erreur d'estimation des rendements espérés. Min variance et Risk parity sont plus stables. Les écarts de Sharpe entre méthodes (erreur standard d'environ ±0,3 sur 15 ans) ne sont pas statistiquement significatifs : l'équipondéré reste une référence difficile à battre.
+
+**Limites** : la frontière efficiente est calculée sur tout l'échantillon (illustration in-sample), covariance empirique sans régularisation, poids long-only, 4 actifs et une seule période.
+
+
 
 ## Installation
 ```bash
