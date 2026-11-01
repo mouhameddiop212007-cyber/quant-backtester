@@ -11,6 +11,17 @@ l'optimisation de portefeuille (Markowitz, VaR/CVaR, Risk Parity).
 - Moteur de backtest avec **frais de transaction, slippage et execution a J+1**
   (pas de look-ahead bias)
 
+## Résultats (SPY, 2010 à aujourd'hui, frais 5 bps + slippage 2 bps)
+
+![SMA vs Buy & Hold](results/sma_vs_buyhold.png)
+
+| | Rendement annualisé | Volatilité | Sharpe | Max drawdown |
+|---|---|---|---|---|
+| Buy & Hold | 13,9 % | 17,0 % | 0,85 | -33,7 % |
+| SMA 50/200 | 9,1 % | 13,9 % | 0,70 | -33,7 % |
+
+La stratégie SMA réduit la volatilité mais sous-performe le Buy & Hold sur cette période haussière, et elle ne protège pas du krach de mars 2020, trop rapide pour des moyennes mobiles de cette longueur.
+
 ## Installation
 ```bash
 git clone <ton-repo> && cd quant-backtester
