@@ -70,6 +70,23 @@ calculee avec les informations disponibles a la cloture du jour).
 - Frais et slippage simplifies
 - Resultats passes != resultats futurs
 
+## Validation hors-échantillon (walk-forward)
+
+![Walk-forward](results/walk_forward.png)
+
+Optimisation de la fenêtre du momentum (20 à 250 jours) sur 5 ans glissants, test sur l'année suivante (12 folds, 2015 à 2026).
+
+| | Rendement | Volatilité | Sharpe | Max drawdown |
+|---|---|---|---|---|
+| Momentum walk-forward | 5,3 % | 12,0 % | 0,49 | -23,4 % |
+| Buy & Hold | 13,5 % | 17,5 % | 0,81 | -33,7 % |
+
+**Lecture** : le momentum réduit le drawdown de 10 points mais ne bat pas le Buy & Hold en rendement ajusté du risque. Le paramètre optimal change à chaque fold (de 20 à 180 jours), ce qui indique qu'il n'y a pas de fenêtre stable à exploiter. Optimiser sur le passé n'a pas produit de gain hors-échantillon.
+
+**Limites** : un seul actif, 12 folds d'une année (faible puissance statistique), le dernier fold est partiel.
+
+
+
 ## Feuille de route
 - [x] Phase 1 : donnees et metriques
 - [x] Phase 2 : moteur de backtest (socle)

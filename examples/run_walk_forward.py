@@ -48,3 +48,6 @@ Path("results").mkdir(exist_ok=True)
 fig.tight_layout()
 fig.savefig("results/walk_forward.png", dpi=150)
 print("Graphique enregistre dans results/walk_forward.png")
+
+fixed = evaluate(prices, Momentum(126), start=oos.index[0])
+print(f"Sharpe momentum fixe 126j (meme periode) : {sharpe_ratio(fixed):.2f}")

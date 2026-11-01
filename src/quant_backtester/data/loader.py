@@ -41,3 +41,17 @@ def load_prices(
     close = close.dropna().rename(ticker)
     close.to_csv(cache_file)
     return close
+
+
+def load_universe(
+    tickers: list[str],
+    start: str = "2010-01-01",
+    end: str | None = None,
+    cache_dir: Path | str = DEFAULT_CACHE_DIR,
+    refresh: bool = False,
+) -> pd.DataFrame:
+    """Prix de cloture ajustes de plusieurs tickers, alignes sur les dates communes."""
+    columns = [load_prices(t, start, end, cache_dir, refresh) for t in tickers]
+    prices = pd.concat(columns, axis=1).dropna()
+    prices.columns = tickers
+    return prices
