@@ -22,6 +22,23 @@ l'optimisation de portefeuille (Markowitz, VaR/CVaR, Risk Parity).
 
 La stratégie SMA réduit la volatilité mais sous-performe le Buy & Hold sur cette période haussière, et elle ne protège pas du krach de mars 2020, trop rapide pour des moyennes mobiles de cette longueur.
 
+## Comparaison de stratégies (SPY, 2010 à aujourd'hui)
+
+![Comparaison](results/compare_strategies.png)
+
+| Stratégie | Rendement | Volatilité | Sharpe | Max drawdown |
+|---|---|---|---|---|
+| Buy & Hold | 13,9 % | 17,0 % | 0,85 | -33,7 % |
+| SMA 50/200 | 9,1 % | 13,9 % | 0,70 | -33,7 % |
+| RSI 14 (30/70) | 7,6 % | 13,0 % | 0,63 | -28,4 % |
+| Momentum 126j | 8,4 % | 11,6 % | 0,75 | -23,8 % |
+
+**Lecture** : aucune stratégie ne bat le Buy & Hold en rendement ajusté du risque sur cette période haussière. Le momentum offre le meilleur compromis : drawdown réduit de 10 points pour environ 5 points de rendement en moins.
+
+**Limites** : le cash ne rapporte rien dans cette version, un seul actif et une seule période sont testés, les résultats passés ne préjugent pas des résultats futurs.
+
+
+
 ## Installation
 ```bash
 git clone <ton-repo> && cd quant-backtester
